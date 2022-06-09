@@ -1,5 +1,6 @@
 package jeep.controller;
 
+import com.promineotech.jeep.entity.Jeep;
 import com.promineotech.jeep.entity.JeepModel;
 import com.promineotech.jeep.JeepSales;
 import jeep.controller.support.FetchJeepTestSupport;
@@ -14,9 +15,11 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import java.util.List;
 
@@ -42,32 +45,26 @@ class FetchJeepTest extends FetchJeepTestSupport {
 //    given when then, Martin Fowler
 
     @Test
-    void testDb() {
+    void testThatJeepsAreReturnedWhenAValidModelAndTrimAreSupplied() {
+//        Given: a valid model, trim, and URI
+        JeepModel model = JeepModel.WRANGLER;
+        String trim = "Sport";
+        String uri = String.format("http://localhost:%d/jeeps?model=%s&trim=%s", serverPort, model, trim);
+        System.out.println(uri);
+//        String uri = String.format("%s?model=%s&trim=%s", getBaseUri(), model, trim);
+//            System.out.println(uri);
 
+//        When: a connection is made to the URI
+        ResponseEntity<List<Jeep>> response = restTemplate.exchange(
+                uri, HttpMethod.GET,null, new ParameterizedTypeReference<>() {});
+//        ResponseEntity<Jeep> response = restTemplate.getForEntity(uri, Jeep.class);
+
+//        Then: a success (200 ok) status code is returned
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+//        And: the actual list returned is the same as the expected list
+        List<Jeep> expected = buildExpected();
+        assertThat(response.getBody()).isEqualTo(expected);
     }
-
-//    @Disabled
-//    @Test
-//    void testThatJeepsAreReturnedWhenAValidModelAndTrimAreSupplied() {
-////        Given: a valid model, trim, and URI
-//        JeepModel model = JeepModel.WRANGLER;
-//        String trim = "Sport";
-//        String uri = String.format("http://localhost:%d/jeeps?model=%s&trim=%s", serverPort, model, trim);
-//        System.out.println(uri);
-////        String uri = String.format("%s?model=%s&trim=%s", getBaseUri(), model, trim);
-////            System.out.println(uri);
-//
-////        When: a connection is made to the URI
-//        ResponseEntity<List<Jeep>> response = restTemplate.exchange(
-//                uri, HttpMethod.GET,null, new ParameterizedTypeReference<>() {});
-////        ResponseEntity<Jeep> response = restTemplate.getForEntity(uri, Jeep.class);
-//
-////        Then: a success (200 ok) status code is returned
-//        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-//
-////        And: the actual list returned is the same as the expected list
-//        List<Jeep> expected = buildExpected();
-//        assertThat(response.getBody()).isEqualTo(expected);
-//    }
 
 }
