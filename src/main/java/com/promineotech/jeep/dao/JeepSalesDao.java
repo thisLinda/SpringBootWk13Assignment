@@ -1,11 +1,10 @@
-package com.promineotech.jeep.service;
+package com.promineotech.jeep.dao;
 
 import com.promineotech.jeep.entity.Jeep;
 import com.promineotech.jeep.entity.JeepModel;
 
 import java.util.List;
 
-public interface JeepSalesService {
+public interface JeepSalesDao {
     List<Jeep> fetchJeeps(JeepModel model, String trim);
-
 }

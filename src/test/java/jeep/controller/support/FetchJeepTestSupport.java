@@ -2,10 +2,15 @@ package jeep.controller.support;
 
 import com.promineotech.jeep.entity.Jeep;
 import com.promineotech.jeep.entity.JeepModel;
+import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FetchJeepTestSupport extends BaseTest {
     protected List<Jeep> buildExpected() {
@@ -29,7 +34,19 @@ public class FetchJeepTestSupport extends BaseTest {
                 .build());
         // @formatter:on
 
+        Collections.sort(list);
         return list;
+    }
+
+    protected void assertErrorMessageValid(Map<String, Object> error, HttpStatus status) {
+        // @formatter:off
+        assertThat(error)
+                .containsKey("message")
+                .containsEntry("status code", status.value())
+                .containsEntry("uri", "/jeeps")
+                .containsKey("timestamp")
+                .containsEntry("reason", status.getReasonPhrase());
+        // @formatter:on
     }
 
 }
