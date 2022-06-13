@@ -2,6 +2,7 @@ package jeep.controller.support;
 
 import com.promineotech.jeep.entity.Jeep;
 import com.promineotech.jeep.entity.JeepModel;
+import jeep.controller.support.BaseTest;
 import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;

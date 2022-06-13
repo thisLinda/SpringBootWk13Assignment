@@ -7,7 +7,6 @@ import com.promineotech.jeep.JeepSales;
 import com.promineotech.jeep.service.JeepSalesService;
 import jeep.controller.support.FetchJeepTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,11 +37,11 @@ class FetchJeepTest{
     @Nested
     @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes={JeepSales.class})
     @ActiveProfiles("test")
-    @Sql(scripts = {
-            "classpath:flyway/migrations/V1.0__Jeep_Schema.sql",
-            "classpath:flyway/migrations/V1.1__Jeep_Data.sql"},
+    @Sql(
+            scripts = {"classpath:flyway/migrations/V1.0__Jeep_Schema.sql",
+                "classpath:flyway/migrations/V1.1__Jeep_Data.sql"},
             config=@SqlConfig(encoding = "utf-8"))
-    class TestsThatDoNotPolluteTheApplicationContext extends FetchJeepTestSupport  {
+    class TestsThatDoNotPolluteTheApplicationContext extends FetchJeepTestSupport {
         @Autowired
         private TestRestTemplate restTemplate;
         @LocalServerPort
