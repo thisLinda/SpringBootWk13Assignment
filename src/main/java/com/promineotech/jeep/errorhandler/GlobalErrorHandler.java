@@ -46,7 +46,7 @@ public class GlobalErrorHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     public Map<String, Object> handleException(Exception e, WebRequest webRequest) {
         return createExceptionMessage(e, HttpStatus.INTERNAL_SERVER_ERROR, webRequest, LogStatus.STACK_TRACE);
     }
