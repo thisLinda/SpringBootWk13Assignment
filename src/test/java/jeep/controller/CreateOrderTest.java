@@ -1,8 +1,10 @@
 package jeep.controller;
 
 import com.promineotech.jeep.JeepSales;
+import com.promineotech.jeep.entity.JeepModel;
+import jeep.controller.support.BaseTest;
 import jeep.controller.support.CreateOrderTestSupport;
-import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,33 +24,64 @@ import static org.assertj.core.api.Assertions.assertThat;
         scripts = {"classpath:flyway/migrations/V1.0__Jeep_Schema.sql",
             "classpath:flyway/migrations/V1.1__Jeep_Data.sql"},
         config=@SqlConfig(encoding = "utf-8"))
-public class CreateOrderTest extends CreateOrderTestSupport {
-
-    @LocalServerPort
-    private int serverPort;
-
-    @Autowired
-    @Getter
-    private TestRestTemplate restTemplate;
+@Slf4j
+public class CreateOrderTest extends BaseTest {
+//public class CreateOrderTest extends CreateOrderTestSupport {
+//    @Autowired
+//    private TestRestTemplate restTemplate;
+//    @LocalServerPort
+//    private int serverPort;
 
     @Test
     void testCreateOrderReturnsSuccess201() {
         // Given: an order as JSON
         String body = createOrderBody();
-        String uri = getBaseUriForOrders();
+        String uri = String.format("http://localhost:%d/orders", serverPort);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         HttpEntity<String> bodyEntity = new HttpEntity<>(body, headers);
 
         // When: the order is sent
-        ResponseEntity<?> response = getRestTemplate().exchange(uri, HttpMethod.POST, bodyEntity, Order.class);
+        ResponseEntity<Order> response = getRestTemplate().exchange(uri, HttpMethod.POST, bodyEntity, Order.class);
 
         // Then: a 201 status is returned
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         // And: the returned order is correct
+        assertThat(response.getBody()).isNotNull();
+
+        Order order = response.getBody();
+        assertThat(order.getCustomer().getCustomerId()).isEqualTo("MORISON_LINA");
+        assertThat(order.getModel().getModelId()).isEqualTo(JeepModel.WRANGLER);
+        assertThat(order.getModel().getTrimLevel()).isEqualTo("Sport Altitude");
+        assertThat(order.getModel().getNumDoors()).isEqualTo(4);
+        assertThat(order.getColor().getColorId()).isEqualTo("EXT_NACHO");
+        assertThat(order.getEngine().getEngineId()).isEqualTo("2_0_TURBO");
+        assertThat(order.getTire().getTireId()).isEqualTo("35_TOYO");
+        assertThat(order.getOptions()).hasSize(6);
+    }
+
+    private String createOrderBody() {
+        //@formatter:off
+        return "{\n"
+                + " \"customer\":\"MORISON_LINA\",\n "
+                + " \"model\":\"WRANGLER\",\n"
+                + " \"trim\":\"Sport Altitude\",\n"
+                + " \"doors\":4,\n"
+                + " \"color\":\"EXT_NACHO\",\n"
+                + " \"engine\":\"2_0_TURBO\",\n"
+                + " \"tire\":\"35_TOYO\",\n"
+                + " \"options\":[\n"
+                + " \"DOOR_QUAD_4\",\n"
+                + " \"EXT_AEV_LIFT\",\n"
+                + " \"EXT_WARN_WINCH\",\n"
+                + " \"EXT_WARN_BUMPER_FRONT\",\n"
+                + " \"EXT_WARN_BUMPER_REAR\",\n"
+                + " \"EXT_ARB_COMPRESSOR\"\n"
+                + " ]\n"
+                + "}";
+        //@formatter:on
     }
 
 }

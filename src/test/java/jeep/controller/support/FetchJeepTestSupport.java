@@ -2,7 +2,7 @@ package jeep.controller.support;
 
 import com.promineotech.jeep.entity.Jeep;
 import com.promineotech.jeep.entity.JeepModel;
-import jeep.controller.support.BaseTest;
+// import jeep.controller.support.BaseTest;
 import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
@@ -13,7 +13,8 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FetchJeepTestSupport extends BaseTest {
+// public class FetchJeepTestSupport extends BaseTest {
+public class FetchJeepTestSupport {
     protected List<Jeep> buildExpected() {
         List<Jeep> list = new LinkedList<>();
 

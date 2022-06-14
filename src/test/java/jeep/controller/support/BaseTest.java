@@ -1,13 +1,15 @@
 package jeep.controller.support;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 
 public class BaseTest {
     @LocalServerPort
     private int serverPort;
 
+    @Getter
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -18,4 +20,5 @@ public class BaseTest {
     protected String getBaseUriForOrders() {
         return String.format("http://localhost:%d/orders", serverPort);
     }
+
 }

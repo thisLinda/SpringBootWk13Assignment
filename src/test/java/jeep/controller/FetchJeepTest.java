@@ -56,7 +56,6 @@ class FetchJeepTest{
             String trim = "Sport";
             String uri = String.format("http://localhost:%d/jeeps?model=%s&trim=%s", serverPort, model, trim);
             System.out.println(uri);
-//            System.out.println(uri);
 
 //        When: a connection is made to the URI
             ResponseEntity<List<Jeep>> response = restTemplate.exchange(

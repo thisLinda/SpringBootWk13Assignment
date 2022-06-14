@@ -22,7 +22,7 @@ import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Validated
-@RequestMapping("/orderss")
+@RequestMapping("/orders")
 @OpenAPIDefinition(info = @Info(title = "Jeep Order Service"), servers = {
         @Server(url = "http://localhost:8080", description = "Local server.")
 })
@@ -36,7 +36,7 @@ public interface JeepOrderController {
           responses = {
                   @ApiResponse(
                           responseCode = "200",
-                          description = "The created is returned",
+                          description = "The created Jeep is returned",
                           content = @Content(
                                   mediaType="application/json",
                                   schema = @Schema(implementation = Order.class))),
@@ -65,6 +65,6 @@ public interface JeepOrderController {
     )
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    Order createOrder(@RequestBody OrderRequest order);
+    Order createOrder(@RequestBody OrderRequest orderRequest);
 
 }
