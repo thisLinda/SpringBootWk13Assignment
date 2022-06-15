@@ -1,6 +1,5 @@
 package jeep.controller.support;
 
-//public class CreateOrderTestSupport {
  public class CreateOrderTestSupport extends BaseTest {
     protected String createOrderBody() {
         //@formatter:off

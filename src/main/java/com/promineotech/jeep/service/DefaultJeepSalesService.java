@@ -36,4 +36,19 @@ public class DefaultJeepSalesService implements JeepSalesService {
         return jeeps;
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public List<Jeep> fetchAllJeeps() {
+        log.info("In DefaultJeepSalesService.fetchAllJeeps()");
+
+        List<Jeep> jeeps = jeepSalesDao.fetchAllJeeps();
+
+        if (jeeps.isEmpty()) {
+            String msg = String.format("No jeeps found");
+            throw new NoSuchElementException(msg);
+        }
+        Collections.sort(jeeps);;
+        return jeeps;
+    }
+
 }

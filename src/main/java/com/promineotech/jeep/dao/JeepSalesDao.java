@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface JeepSalesDao {
     List<Jeep> fetchJeeps(JeepModel model, String trim);
+
+    List<Jeep> fetchAllJeeps();
 }

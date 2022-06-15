@@ -1,8 +1,5 @@
 package com.promineotech.jeep.controller;
 
-import com.promineotech.jeep.Constants;
-import com.promineotech.jeep.entity.Jeep;
-import com.promineotech.jeep.entity.JeepModel;
 import com.promineotech.jeep.entity.Order;
 import com.promineotech.jeep.entity.OrderRequest;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -13,12 +10,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Pattern;
+import javax.validation.Valid;
 import java.util.List;
 
 @Validated
@@ -26,7 +22,6 @@ import java.util.List;
 @OpenAPIDefinition(info = @Info(title = "Jeep Order Service"), servers = {
         @Server(url = "http://localhost:8080", description = "Local server.")
 })
-
 public interface JeepOrderController {
 
     // @formatter:off
@@ -65,6 +60,37 @@ public interface JeepOrderController {
     )
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    Order createOrder(@RequestBody OrderRequest orderRequest);
+    Order createOrder(@Valid @RequestBody OrderRequest orderRequest);
+    // @formatter:on
+
+    // @formatter:off
+    @Operation(
+            summary = "Get all orders for a Jeep",
+            description = "Returns the Jeep orders",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Return all Jeep orders",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(implementation = Order.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Error.",
+                            content = @Content(mediaType = "application/json")),
+                    @ApiResponse(
+                            responseCode = "404",
+                            description = "No orders found",
+                            content = @Content(mediaType = "application/json")),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "An unplanned error occurred.",
+                            content = @Content(mediaType = "application/json"))
+            }
+    )
+    @GetMapping("/all")
+    @ResponseStatus(code = HttpStatus.OK)
+    List<Order> fetchAllOrders();
+    // @formatter:on
 
 }

@@ -7,7 +7,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 
 public class BaseTest {
     @LocalServerPort
-    private int serverPort;
+    protected int serverPort;
 
     @Getter
     @Autowired

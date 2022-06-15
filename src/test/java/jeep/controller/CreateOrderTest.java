@@ -1,20 +1,19 @@
 package jeep.controller;
 
 import com.promineotech.jeep.JeepSales;
+import com.promineotech.jeep.entity.Order;
 import com.promineotech.jeep.entity.JeepModel;
-import jeep.controller.support.BaseTest;
 import jeep.controller.support.CreateOrderTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
+import org.springframework.test.jdbc.JdbcTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,18 +24,19 @@ import static org.assertj.core.api.Assertions.assertThat;
             "classpath:flyway/migrations/V1.1__Jeep_Data.sql"},
         config=@SqlConfig(encoding = "utf-8"))
 @Slf4j
-public class CreateOrderTest extends BaseTest {
-//public class CreateOrderTest extends CreateOrderTestSupport {
-//    @Autowired
-//    private TestRestTemplate restTemplate;
-//    @LocalServerPort
-//    private int serverPort;
+public class CreateOrderTest extends CreateOrderTestSupport {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Test
     void testCreateOrderReturnsSuccess201() {
         // Given: an order as JSON
         String body = createOrderBody();
         String uri = String.format("http://localhost:%d/orders", serverPort);
+
+        int numRowsOrders = JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders");
+        int numRowsOptions = JdbcTestUtils.countRowsInTable(jdbcTemplate, "order_options");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -60,28 +60,11 @@ public class CreateOrderTest extends BaseTest {
         assertThat(order.getEngine().getEngineId()).isEqualTo("2_0_TURBO");
         assertThat(order.getTire().getTireId()).isEqualTo("35_TOYO");
         assertThat(order.getOptions()).hasSize(6);
-    }
 
-    private String createOrderBody() {
-        //@formatter:off
-        return "{\n"
-                + " \"customer\":\"MORISON_LINA\",\n "
-                + " \"model\":\"WRANGLER\",\n"
-                + " \"trim\":\"Sport Altitude\",\n"
-                + " \"doors\":4,\n"
-                + " \"color\":\"EXT_NACHO\",\n"
-                + " \"engine\":\"2_0_TURBO\",\n"
-                + " \"tire\":\"35_TOYO\",\n"
-                + " \"options\":[\n"
-                + " \"DOOR_QUAD_4\",\n"
-                + " \"EXT_AEV_LIFT\",\n"
-                + " \"EXT_WARN_WINCH\",\n"
-                + " \"EXT_WARN_BUMPER_FRONT\",\n"
-                + " \"EXT_WARN_BUMPER_REAR\",\n"
-                + " \"EXT_ARB_COMPRESSOR\"\n"
-                + " ]\n"
-                + "}";
-        //@formatter:on
+        assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "orders"))
+                .isEqualTo(numRowsOrders + 1);
+        assertThat(JdbcTestUtils.countRowsInTable(jdbcTemplate, "order_options"))
+                .isEqualTo(numRowsOptions + 6);
     }
 
 }

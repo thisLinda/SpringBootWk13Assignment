@@ -1,5 +1,6 @@
 package com.promineotech.jeep.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,4 +12,9 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String phone;
+
+    @JsonIgnore
+    public Long getCustomerPK() {
+        return customerPK;
+    }
 }

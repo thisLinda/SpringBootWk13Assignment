@@ -1,6 +1,8 @@
 package com.promineotech.jeep.entity;
 
 import java.math.BigDecimal;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,4 +19,9 @@ public class Engine {
     private boolean hasStartStop;
     private String description;
     private BigDecimal price;
+
+    @JsonIgnore
+    public Long getEnginePK() {
+        return enginePK;
+    }
 }

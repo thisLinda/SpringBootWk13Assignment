@@ -27,7 +27,6 @@ import java.util.List;
 @OpenAPIDefinition(info = @Info(title = "Jeep Sales Service"), servers = {
         @Server(url = "http://localhost:8080", description = "Local server.")
 })
-
 public interface JeepSalesController {
 
     // @formatter:off
@@ -80,5 +79,14 @@ public interface JeepSalesController {
             @RequestParam(required = false)
                     String trim);
     // @formatter:on
+
+    // Add open API documentation
+    @PostMapping("/{jeepPK}/image")
+    @ResponseStatus(code = HttpStatus.CREATED)
+    String uploadImage(@RequestParam("image") MultipartFile image,
+                       @PathVariable Long jeepPK);
+
+    List<Jeep> fetchAllJeeps();
+
 
 }

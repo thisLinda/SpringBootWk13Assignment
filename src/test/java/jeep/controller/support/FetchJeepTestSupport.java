@@ -13,8 +13,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// public class FetchJeepTestSupport extends BaseTest {
-public class FetchJeepTestSupport {
+ public class FetchJeepTestSupport extends BaseTest {
     protected List<Jeep> buildExpected() {
         List<Jeep> list = new LinkedList<>();
 

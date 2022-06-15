@@ -53,4 +53,32 @@ public class DefaultJeepSalesDao implements JeepSalesDao {
             }
         });
     }
+
+    @Override
+    public List<Jeep> fetchAllJeeps() {
+        log.debug("In fetchAllJeeps Dao!");
+
+        // @formatter:off
+        String sql = ""
+                +"SELECT * "
+                + "FROM models; ";
+        // @formatter:on
+
+        return jdbcTemplate.query(sql,
+                new RowMapper<Jeep>() {
+                    @Override
+                    public Jeep mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        // @formatter:off
+                        return Jeep.builder()
+                                .basePrice(new BigDecimal(rs.getString("base_price")))
+                                .modelId(JeepModel.valueOf(rs.getString("model_id")))
+                                .modelPK(rs.getLong("model_pk"))
+                                .numDoors(rs.getInt("num_doors"))
+                                .trimLevel(rs.getString("trim_level"))
+                                .wheelSize(rs.getInt("wheel_size"))
+                                .build();
+                        // @formatter:on
+                    }});
+    }
+
 }
