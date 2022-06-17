@@ -80,13 +80,10 @@ public interface JeepSalesController {
                     String trim);
     // @formatter:on
 
-    // Add open API documentation
-    @PostMapping("/{jeepPK}/image")
-    @ResponseStatus(code = HttpStatus.CREATED)
-    String uploadImage(@RequestParam("image") MultipartFile image,
-                       @PathVariable Long jeepPK);
-
-    List<Jeep> fetchAllJeeps();
-
+//    // Add open API documentation
+//    @PostMapping("/{jeepPK}/image")
+//    @ResponseStatus(code = HttpStatus.CREATED)
+//    String uploadImage(@RequestParam("image") MultipartFile image,
+//                       @PathVariable Long jeepPK);
 
 }

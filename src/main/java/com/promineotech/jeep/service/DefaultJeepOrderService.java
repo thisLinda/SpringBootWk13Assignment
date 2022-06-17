@@ -35,11 +35,6 @@ public class DefaultJeepOrderService implements JeepOrderService {
         return jeepOrderDao.saveOrder(customer, jeep, color, engine, tire, price, options);
     }
 
-    @Override
-    public List<Order> fetchAllOrders() {
-        return null;
-    }
-
     private Tire getTire(OrderRequest orderRequest) {
         return jeepOrderDao.fetchTire(orderRequest.getTire())
                 .orElseThrow(() -> new NoSuchElementException("Tire with ID="

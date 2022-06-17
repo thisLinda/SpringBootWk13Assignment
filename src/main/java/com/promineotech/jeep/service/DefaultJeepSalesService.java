@@ -51,4 +51,9 @@ public class DefaultJeepSalesService implements JeepSalesService {
         return jeeps;
     }
 
+    @Override
+    public Jeep createJeep(Jeep newJeep) {
+        return null;
+    }
+
 }
